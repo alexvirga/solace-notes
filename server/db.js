@@ -7,6 +7,9 @@ const pool = new Pool({
   host: process.env.HOST,
   port: process.env.PORT,
   database: "solace_notes_db",
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = pool;
