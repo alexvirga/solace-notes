@@ -5,6 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "if-env TYPE=server && (cd server && npm install) || (cd client && npm install)",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && node server.js",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:all": "npm run install:client && npm run install:server",
     "server": "node ./server/server.js",
     "client": " cd client && npm run dev"
   },
@@ -12,5 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "if-env": "^1.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
