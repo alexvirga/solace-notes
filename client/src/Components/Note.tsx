@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { editNote } from "./services";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
@@ -35,18 +36,12 @@ const Note = ({ note, deleteNote, getNotes }: Props) => {
     setNewTitle(note.title);
   }, [note]);
 
-  const editNote = async () => {
+  const editNoteHandler = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/notes/edit/${note.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({ noteBody: newBody, noteTitle: newTitle }),
-        }
-      );
-      console.log(response);
-      getNotes();
+      const response = await editNote(note.id, newBody, newTitle);
+      if (response === 200) {
+        getNotes();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -54,7 +49,7 @@ const Note = ({ note, deleteNote, getNotes }: Props) => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    editNote();
+    editNoteHandler();
     setIsEditing(false);
   };
 

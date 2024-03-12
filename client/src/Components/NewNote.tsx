@@ -1,23 +1,30 @@
 import { useState } from "react";
-import { Button, Box, FormLabel, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Box,
+  FormLabel,
+  TextField,
+  Typography,
+  Card,
+} from "@mui/material";
+import { createNote } from "./services";
 
 interface Props {
   getNotes: () => void;
 }
 const NewNote = ({ getNotes }: Props) => {
-  const [newTitle, setNewTitle] = useState<string>();
-  const [newBody, setNewBody] = useState<string>();
+  const [newTitle, setNewTitle] = useState("");
+  const [newBody, setNewBody] = useState("");
   const [bodyError, setBodyError] = useState("");
 
-  const createNote = async () => {
+  const createNoteHnadler = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/notes/new`, {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ noteBody: newBody, noteTitle: newTitle }),
-      });
-      console.log(response);
-      getNotes();
+      const response = await createNote(newBody, newTitle);
+      if (response === 200) {
+        getNotes();
+        setNewBody("");
+        setNewTitle("");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -25,7 +32,7 @@ const NewNote = ({ getNotes }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createNote();
+    createNoteHnadler();
   };
 
   const handleBodyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,29 +46,32 @@ const NewNote = ({ getNotes }: Props) => {
   };
 
   return (
-    <Box className="new-note-container">
-      <Typography variant="h2">New Note</Typography>
-      <Box className="new-note-form"></Box>
-      <form onSubmit={handleSubmit} className={"new-note-form"}>
-        <FormLabel> Title</FormLabel>
-        <TextField
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-        />
-        <FormLabel> Body</FormLabel>
-        <TextField
-          value={newBody}
-          rows={4}
-          multiline
-          onChange={handleBodyChange}
-          error={!!bodyError}
-          helperText={bodyError}
-        />
-        <Button type="submit" disabled={!!bodyError}>
-          {" "}
-          Create New Note{" "}
-        </Button>
-      </form>
+    <Box className="new-note-section">
+      <Typography variant="h2" textAlign="left">
+        New Note
+      </Typography>
+      <Card className="new-note-form-card">
+        <form onSubmit={handleSubmit} className={"new-note-form"}>
+          <FormLabel> Title</FormLabel>
+          <TextField
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+          <FormLabel> Body</FormLabel>
+          <TextField
+            value={newBody}
+            rows={4}
+            multiline
+            onChange={handleBodyChange}
+            error={!!bodyError}
+            helperText={bodyError}
+            required
+          />
+          <Button type="submit" disabled={!!bodyError || !newBody.length}>
+            Create New Note
+          </Button>
+        </form>
+      </Card>
     </Box>
   );
 };
