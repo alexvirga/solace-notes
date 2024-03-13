@@ -38,4 +38,5 @@
 
 - Use docker for database.
 - Cleanup frontend code. It can be broken into smaller components with cleaner file structure.
+- Improve form handling (uncontrolled forms) and validation
 - Make it pretty (and responsive)
