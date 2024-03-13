@@ -33,3 +33,9 @@
 - Database: PostgreSQL
 - Styling: MaterialUI
 - Hosting: Render.com
+
+### Changes that can be made
+
+- Use docker for database.
+- Cleanup frontend code. It can be broken into smaller components with cleaner file structure.
+- Make it pretty (and responsive)
